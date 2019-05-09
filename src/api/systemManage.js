@@ -115,6 +115,14 @@ export function resetPwd(data) {
   })
 }
 
+export function modifyPwd(data) {
+  return request({
+    url: '/account/modifyMyPassword',
+    method: 'post',
+    data
+  })
+}
+
 export function addAccount(data) {
   return request({
     url: '/account/addAccount',

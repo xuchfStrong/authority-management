@@ -9,7 +9,7 @@ import Layout from '@/views/layout/Layout'
 /* Router Modules */
 import componentsRouter from './modules/components'
 import chartsRouter from './modules/charts'
-import tableRouter from './modules/table'
+// import tableRouter from './modules/table'
 import nestedRouter from './modules/nested'
 
 /** note: sub-menu only appear when children.length>=1
@@ -117,6 +117,7 @@ export default new Router({
 })
 
 export const asyncRouterMap = [
+  /**
   {
     path: '/permission',
     component: Layout,
@@ -167,6 +168,7 @@ export const asyncRouterMap = [
       }
     ]
   },
+  */
 
   {
     path: '/icon',
@@ -231,8 +233,8 @@ export const asyncRouterMap = [
   componentsRouter,
   chartsRouter,
   nestedRouter,
-  tableRouter,
 
+  /*
   {
     path: '/example',
     component: Layout,
@@ -273,7 +275,6 @@ export const asyncRouterMap = [
     ]
   },
 
-  /*
   {
     path: '/tab',
     component: Layout,

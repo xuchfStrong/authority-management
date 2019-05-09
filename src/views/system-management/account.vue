@@ -37,12 +37,12 @@
       <el-table-column prop="actName" label="姓名" align="center"/>
       <el-table-column prop="actPhone" label="手机号码" width="110" align="center"/>
       <el-table-column prop="actEmail" label="邮箱地址" width="200" align="center"/>
-      <el-table-column label="性别" align="center">
+      <el-table-column label="状态" align="center">
         <template slot-scope="scope">
           {{ scope.row.actActive | statusFilter }}
         </template>
       </el-table-column>
-      <el-table-column label="状态" align="center">
+      <el-table-column label="性别" align="center">
         <template slot-scope="scope">
           {{ scope.row.actGender | genderFilter }}
         </template>
@@ -136,15 +136,15 @@
 </template>
 
 <script>
-import { getRoleList, getAccountGrid, changeAccountStatus, resetPwd, addAccount, editAccount, deleteAccount } from '@/api/userManage'
+import { getRoleList, getAccountGrid, changeAccountStatus, resetPwd, addAccount, editAccount, deleteAccount } from '@/api/systemManage'
 import { deepClone } from '@/utils'
 
 const defaultAccount = {
   actId: 1,
-  actAccount: '',
-  actName: '',
-  actPhone: '',
-  actEmail: '',
+  actAccount: null,
+  actName: null,
+  actPhone: null,
+  actEmail: null,
   actGender: 1,
   actActive: 1,
   roleIds: []
@@ -245,8 +245,8 @@ export default {
     handleChangeStatus(index, row) {
       const status = this.reverseStatus(row.actActive)
       const para = {
-        seeId: row.actId,
-        seeActive: row.actActive
+        actId: row.actId,
+        actActive: row.actActive
       }
       changeAccountStatus(para).then(res => {
       }).catch(res => {
@@ -264,7 +264,7 @@ export default {
         pagesize: this.pagesize
       }
       getAccountGrid(para).then(res => {
-        this.accounts = res.data.list
+        this.accountList = res.data.list
         this.total = res.data.total
         this.loading = false
       }).catch(res => {
@@ -340,7 +340,10 @@ export default {
 
       if (isEdit) {
         try {
+          if (this.account.actPhone === '') { this.account.actPhone = null }
+          if (this.account.actEmail === '') { this.account.actEmail = null }
           await editAccount(this.account)
+          // this.handleGetAccount()
           for (let index = 0; index < this.accountList.length; index++) {
             if (this.accountList[index].actId === this.account.actId) {
               this.accountList.splice(index, 1, Object.assign({}, this.account))
@@ -352,9 +355,11 @@ export default {
         }
       } else {
         try {
-          const { data } = await addAccount(this.account)
-          this.account.actId = data.actId
-          this.accountList.push(this.account)
+          await addAccount(this.account)
+          this.handleGetAccount()
+          // const { data } = await addAccount(this.account)
+          // this.account.actId = data.actId
+          // this.accountList.push(this.account)
         } catch (error) {
           this.dialogVisible = false
         }

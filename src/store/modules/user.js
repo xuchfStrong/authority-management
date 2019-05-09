@@ -65,7 +65,7 @@ const user = {
           commit('SET_TOKEN', data['token'])
           commit('SET_NAME', data.actName)
           commit('SET_ACCOUNT', data.actAccount)
-          commit('SET_ISADMIN', data.isAdmin)
+          commit('SET_ISADMIN', data.admin)
           commit('SET_asyncRouterMapDynamic', data.menus) // 根据后台返回的menus设置路由
           setToken(response.data['token'])
           resolve()

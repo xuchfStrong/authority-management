@@ -132,7 +132,7 @@
 </template>
 
 <script>
-import { getMenuList, getResourceList, changeRoleStatus, getRoleGrid, deleteRole, addRole, editRole } from '@/api/userManage'
+import { getMenuList, getResourceList, changeRoleStatus, getRoleGrid, deleteRole, addRole, editRole } from '@/api/systemManage'
 import { deepClone } from '@/utils'
 
 const defaultRole = {
@@ -165,7 +165,7 @@ export default {
       checkStrictly: false,
       menuProps: {
         children: 'children',
-        label: 'meuName'
+        label: 'meuText'
       },
       resourceProps: {
         children: 'children',
@@ -245,41 +245,41 @@ export default {
       return data
     },
 
-    // 将资源列表中的每一个seeId添加一条{'meuPid': 9999, 'meuId': 本服务的seeId, meuName: 本服务的seeName}
+    // 将资源列表中的每一个seeId添加一条{'meuPid': 9999, 'meuId': 本服务的meuSeeid, meuText: 本服务的seeText}
     generateFullMenus(menus) {
       const menusCopy = [...menus]
       const rootId = 9999
-      const seeIds = []
+      const meuSeeIds = []
       const services = []
       menusCopy.forEach(menu => {
-        if (!seeIds.includes(menu.seeId)) {
-          seeIds.push(menu.seeId)
-          services.push({ seeId: menu.seeId, seeName: menu.seeName })
+        if (!meuSeeIds.includes(menu.meuSeeid)) {
+          meuSeeIds.push(menu.meuSeeid)
+          services.push({ meuSeeid: menu.meuSeeid, seeText: menu.seeText })
         }
       })
 
       services.forEach(service => {
-        menus.push({ meuPid: rootId, meuId: service.seeId, meuName: service.seeName })
+        menus.push({ meuPid: rootId, meuId: service.meuSeeid, meuText: service.seeText })
       })
 
       return menus
     },
 
-    // 将资源列表中的每一个seeId添加一条{'seeId': 9999, 'reeId': 本服务的seeId, reeName: 本服务的seeName}
+    // 将资源列表中的每一个seeId添加一条{'reeSeeid': 9999, 'reeId': 本服务的seeId, reeName: 本服务的seeText}
     generateFullResources(resources) {
       const resourcesCopy = [...resources]
       const rootId = 9999
-      const seeIds = []
+      const reeSeeIds = []
       const services = []
       resourcesCopy.forEach(resource => {
-        if (!seeIds.includes(resource.seeId)) {
-          seeIds.push(resource.seeId)
-          services.push({ seeId: resource.seeId, seeName: resource.seeName })
+        if (!reeSeeIds.includes(resource.reeSeeid)) {
+          reeSeeIds.push(resource.reeSeeid)
+          services.push({ reeSeeid: resource.reeSeeid, seeText: resource.seeText })
         }
       })
 
       services.forEach(service => {
-        resources.push({ 'seeId': rootId, 'reeId': service.seeId, reeName: service.seeName })
+        resources.push({ 'reeSeeid': rootId, 'reeId': service.reeSeeid, reeName: service.seeText })
       })
 
       return resources
@@ -299,9 +299,9 @@ export default {
     setResourceTreeData(list, rootId) {
       const cloneData = JSON.parse(JSON.stringify(list)) // 对源数据深度克隆
       return cloneData.filter(father => { // 循环所有项，并添加children属性
-        const branchArr = cloneData.filter(child => father.reeId === child.seeId) // 返回每一项的子级数组
+        const branchArr = cloneData.filter(child => father.reeId === child.reeSeeid) // 返回每一项的子级数组
         branchArr.length > 0 ? father.children = branchArr : '' // 给父级添加一个children属性，并赋值
-        return father.seeId === rootId // 返回第一层
+        return father.reeSeeid === rootId // 返回第一层
       })
     },
 
@@ -420,6 +420,7 @@ export default {
       if (isEdit) {
         try {
           await editRole(this.role)
+          // this.handleGetRoles()
           for (let index = 0; index < this.rolesList.length; index++) {
             if (this.rolesList[index].roeId === this.role.roeId) {
               this.rolesList.splice(index, 1, Object.assign({}, this.role))
@@ -431,9 +432,11 @@ export default {
         }
       } else {
         try {
-          const { data } = await addRole(this.role)
-          this.role.roeId = data.roeId
-          this.rolesList.push(this.role)
+          await addRole(this.role)
+          this.handleGetRoles()
+          // const { data } = await addRole(this.role)
+          // this.role.roeId = data.roeId
+          // this.rolesList.push(this.role)
         } catch (error) {
           this.dialogVisible = false
         }

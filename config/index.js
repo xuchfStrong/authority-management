@@ -9,7 +9,15 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {},
+    proxyTable: {
+      '/api': {
+        target: 'http://192.168.0.135:8762/service-auth-manager/',  //目标接口域名
+        changeOrigin: true,  //是否跨域
+        pathRewrite: {
+          '^/api': ''   //重写接口，将请求url中的/api删除
+        }
+      }
+    },
 
     // Various Dev Server settings
 

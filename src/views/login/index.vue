@@ -76,6 +76,7 @@ import LangSelect from '@/components/LangSelect'
 import SocialSign from './socialsignin'
 import Cookies from 'js-cookie'
 import CryptoJS from 'crypto-js'
+import md5 from 'js-md5'
 
 export default {
   name: 'Login',
@@ -135,7 +136,11 @@ export default {
             this.removeCookie()
           }
           this.loading = true
-          this.$store.dispatch('LoginByUsername', this.loginForm).then(() => {
+          const userinfo = {
+            actAccount: this.loginForm.actAccount,
+            actPassword: md5(this.loginForm.actPassword)
+          }
+          this.$store.dispatch('LoginByUsername', userinfo).then(() => {
             this.loading = false
             this.$router.push({ path: this.redirect || '/' })
           }).catch(() => {

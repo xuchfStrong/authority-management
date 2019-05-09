@@ -28,8 +28,8 @@
         </el-menu>
       </el-col>
       <div class="right-menu">
-        <!-- <template>
-          <search class="right-menu-item" />
+        <template>
+          <!-- <search class="right-menu-item" />
           <error-log class="errLog-container right-menu-item hover-effect"/>
           <screenfull class="right-menu-item hover-effect"/>
           <el-tooltip :content="$t('navbar.size')" effect="dark" placement="bottom">
@@ -38,22 +38,29 @@
           <lang-select class="right-menu-item hover-effect"/>
           <el-tooltip :content="$t('navbar.theme')" effect="dark" placement="bottom">
             <theme-picker class="right-menu-item hover-effect"/>
-          </el-tooltip>
-        </template> -->
-
-        <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
-          <el-tooltip :content="name" effect="dark" placement="bottom">
+          </el-tooltip> -->
+          <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
+            <el-tooltip :content="name" effect="dark" placement="bottom">
+              <div class="avatar-wrapper">
+                <svg-icon icon-class="user" class-name="user-avatar"/>
+                <!-- <i class="el-icon-caret-bottom"/> -->
+              </div>
+            </el-tooltip>
+            <el-dropdown-menu slot="dropdown">
+              <!-- <el-dropdown-item>
+                <span style="display:block;" @click="logout">退出登录</span>
+              </el-dropdown-item> -->
+              <el-dropdown-item>
+                <modify-pwd/>
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+          <el-tooltip content="退出" effect="dark" placement="bottom" class="right-menu-item hover-effect">
             <div class="avatar-wrapper">
-              <svg-icon icon-class="user" class-name="user-avatar"/>
-              <i class="el-icon-caret-bottom"/>
+              <svg-icon icon-class="logout" class-name="user-avatar" @click="logout"/>
             </div>
           </el-tooltip>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item divided>
-              <span style="display:block;" @click="logout">退出登录</span>
-            </el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
+        </template>
       </div>
     </el-row>
   </div>
@@ -61,6 +68,7 @@
 
 <script>
 import Navitem from './Navitem'
+import ModifyPwd from './ModifyPwd'
 import { mapGetters } from 'vuex'
 import ErrorLog from '@/components/ErrorLog'
 import Screenfull from '@/components/Screenfull'
@@ -73,6 +81,7 @@ import variables from '@/styles/variables.scss'
 export default {
   components: {
     Navitem,
+    ModifyPwd,
     ErrorLog,
     Screenfull,
     SizeSelect,
@@ -181,11 +190,12 @@ export default {
     }
 
     .avatar-container {
-      margin-right: 10px;
+      // margin-right: 10px;
 
       .avatar-wrapper {
         margin-top: 0px;
         position: relative;
+        cursor: pointer;
 
         .user-avatar {
           cursor: pointer;

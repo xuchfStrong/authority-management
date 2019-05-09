@@ -4,7 +4,7 @@
     <el-col :span="24" class="toolbar" style="padding-bottom: 0px">
       <el-form :inline="true">
         <span class="main-text">服务名称:</span>
-        <el-input v-model="serviceName" placeholder="请输入服务名称" style="width: 200px;padding-left: 5px;padding-right: 20px" class="filter-item" @keyup.enter.native="handleFilter"/>
+        <el-input v-model="serviceText" placeholder="请输入服务名称" style="width: 200px;padding-left: 5px;padding-right: 20px" class="filter-item" @keyup.enter.native="handleFilter"/>
         <el-form-item>
           <el-button type="primary" @click="handleFilter">查询</el-button>
         </el-form-item>
@@ -16,7 +16,7 @@
       <el-table v-loading="loading" :data="service" highlight-current-row border fit stripe @selection-change="selsChange">
         <!-- <el-table-column type="selection" width="55" align="center"/> -->
         <el-table-column prop="seeId" label="服务ID" sortable align="center"/>
-        <el-table-column prop="seeName" label="服务名称" sortable align="center"/>
+        <el-table-column prop="seeText" label="服务名称" sortable align="center"/>
         <el-table-column label="服务状态" align="center">
           <template slot-scope="scope">
             <span>{{ scope.row.seeActive | statusFilter }}</span>
@@ -51,7 +51,7 @@
 </template>
 
 <script>
-import { getServiceGrid, changeServiceStatus } from '@/api/userManage'
+import { getServiceGrid, changeServiceStatus } from '@/api/systemManage'
 export default {
   filters: {
     statusFilter(status) {
@@ -70,7 +70,7 @@ export default {
       pagesize: 10,
       sels: [], // 列表选中列
       service: [],
-      serviceName: '',
+      serviceText: '',
       activeValue: 1,
       inactiveValue: 0
     }
@@ -139,7 +139,7 @@ export default {
     handleFilter: function() {
       this.loading = true
       const para = {
-        seeName: this.serviceName,
+        seeText: this.serviceText,
         page: this.page,
         pagesize: this.pagesize
       }
