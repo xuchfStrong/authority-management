@@ -25,14 +25,14 @@
       </el-col>
       <el-col :span="16" style="text-align:right">
         <el-button type="primary" size="small" icon="el-icon-plus" @click="handleAddAccount">新增</el-button>
-        <el-button type="primary" size="small" icon="el-icon-edit" @click="handleEditTop">修改</el-button>
-        <el-button type="primary" size="small" icon="el-icon-delete" @click="handleDeleteTop">删除</el-button>
+        <!-- <el-button type="primary" size="small" icon="el-icon-edit" @click="handleEditTop">修改</el-button>
+        <el-button type="primary" size="small" icon="el-icon-delete" @click="handleDeleteTop">删除</el-button> -->
       </el-col>
     </el-row>
 
     <!--列表-->
     <el-table v-loading="loading" :data="accountList" highlight-current-row border fit stripe @selection-change="selsChange">
-      <el-table-column type="selection" width="40" align="center"/>
+      <!-- <el-table-column type="selection" width="40" align="center"/> -->
       <el-table-column prop="actAccount" label="帐号" sortable align="center"/>
       <el-table-column prop="actName" label="姓名" align="center"/>
       <el-table-column prop="actPhone" label="手机号码" width="110" align="center"/>
@@ -253,8 +253,26 @@ export default {
         row.actActive = status
       })
     },
-
+    // 查询按钮调用的函数，所有查询都查询第一页的数据
     handleFilter() {
+      this.loading = true
+      const para = {
+        actAccount: this.actAccount,
+        actName: this.actName,
+        actPhone: this.actPhone,
+        page: 1,
+        pagesize: this.pagesize
+      }
+      getAccountGrid(para).then(res => {
+        this.accountList = res.data.list
+        this.total = res.data.total
+        this.loading = false
+      }).catch(res => {
+        this.loading = false
+      })
+    },
+    // 变更page和pageSize调用的函数
+    handleChangePage() {
       this.loading = true
       const para = {
         actAccount: this.actAccount,
@@ -371,7 +389,7 @@ export default {
     // 改变页面
     handleCurrentChange(val) {
       this.page = val
-      this.handleGetAccount()
+      this.handleChangePage()
     },
 
     // 获取选中的行
@@ -381,7 +399,7 @@ export default {
 
     changePageSize(size) {
       this.pagesize = size
-      this.handleGetAccount()
+      this.handleChangePage()
     },
 
     // 顶部编辑按钮

@@ -20,13 +20,13 @@
       </el-col>
       <el-col :span="16" style="text-align:right">
         <el-button type="primary" size="small" icon="el-icon-plus" @click="handleAddRole">新增</el-button>
-        <el-button type="primary" size="small" icon="el-icon-edit" @click="handleEditTop">修改</el-button>
-        <el-button type="primary" size="small" icon="el-icon-delete" @click="handleDeleteTop">删除</el-button>
+        <!-- <el-button type="primary" size="small" icon="el-icon-edit" @click="handleEditTop">修改</el-button>
+        <el-button type="primary" size="small" icon="el-icon-delete" @click="handleDeleteTop">删除</el-button> -->
       </el-col>
     </el-row>
 
     <el-table v-loading="loading" :data="rolesList" style="width: 100%;" border @selection-change="selsChange">
-      <el-table-column type="selection" width="40" align="center"/>
+      <!-- <el-table-column type="selection" width="40" align="center"/> -->
       <el-table-column align="center" label="角色名称" width="220">
         <template slot-scope="scope">
           {{ scope.row.roeName }}
@@ -447,13 +447,13 @@ export default {
 
     changePageSize(size) {
       this.pagesize = size
-      this.handleGetRoles()
+      this.handleChangePage()
     },
 
     // 改变页面
     handleCurrentChange(val) {
       this.page = val
-      this.handleGetRoles()
+      this.handleChangePage()
     },
 
     // 获取选中的行
@@ -483,6 +483,22 @@ export default {
     },
 
     handleFilter() {
+      this.loading = true
+      const para = {
+        roeName: this.roleName,
+        page: 1,
+        pagesize: this.pagesize
+      }
+      getRoleGrid(para).then(res => {
+        this.rolesList = res.data.list
+        this.total = res.data.total
+        this.loading = false
+      }).catch(res => {
+        this.loading = false
+      })
+    },
+
+    handleChangePage() {
       this.loading = true
       const para = {
         roeName: this.roleName,
