@@ -20,6 +20,7 @@ const getters = {
   asyncRouterMapDynamic: state => state.user.asyncRouterMapDynamic,
   account: state => state.user.account,
   isAdmin: state => state.user.isAdmin,
-  isGenratedRoutes: state => state.permission.isGenratedRoutes
+  isGenratedRoutes: state => state.permission.isGenratedRoutes,
+  navTopIndex: state => state.app.navTopIndex
 }
 export default getters

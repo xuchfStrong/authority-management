@@ -17,7 +17,7 @@
         </el-form-item>
       </el-form>
       <div style="text-align:right;">
-        <el-button type="danger" @click="dialogVisible=false">取消</el-button>
+        <el-button type="text" @click="dialogVisible=false">取消</el-button>
         <el-button type="primary" @click="handleSubmit">确定</el-button>
       </div>
     </el-dialog>
@@ -92,20 +92,26 @@ export default {
     handleSubmit() {
       this.$refs.form.validate((valid) => {
         if (valid) {
-          this.$confirm('确认提交吗？', '提示', {}).then(() => {
-            const para = {
-              actPassword: md5(this.modifyPwdForm.actPassword),
-              newPassword: md5(this.modifyPwdForm.newPassword),
-              confirmPassword: md5(this.modifyPwdForm.confirmPassword)
-            }
-            modifyPwd(para).then((res) => {
-              this.dialogVisible = false
-              this.$refs.form.resetFields()
-            }).catch(() => {
-              this.dialogVisible = false
-              this.$refs['form'].resetFields()
+          const para = {
+            password: md5(this.modifyPwdForm.actPassword),
+            newPassword: md5(this.modifyPwdForm.newPassword),
+            reNewPassword: md5(this.modifyPwdForm.confirmPassword)
+          }
+          modifyPwd(para).then((res) => {
+            this.$message({
+              message: res.message,
+              type: 'success',
+              duration: 2 * 1000
             })
+            this.dialogVisible = false
+            this.$refs.form.resetFields()
+            const self = this
+            setTimeout(function() {
+              self.logout()
+            }, 1000)
           }).catch(() => {
+            this.dialogVisible = false
+            this.$refs['form'].resetFields()
           })
         }
       })

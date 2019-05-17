@@ -10,7 +10,8 @@ const app = {
     language: Cookies.get('language') || 'zh',
     size: Cookies.get('size') || 'medium',
     navMenu: '',
-    isDashboard: Boolean
+    isDashboard: Boolean,
+    navTopIndex: ''
   },
   mutations: {
     TOGGLE_SIDEBAR: state => {
@@ -43,6 +44,9 @@ const app = {
     },
     SET_IS_DASHBOARD: (state, isDashboard) => {
       state.isDashboard = isDashboard
+    },
+    SET_NAVTOPINDEX: (state, navTopIndex) => {
+      state.navTopIndex = navTopIndex
     }
   },
   actions: {
@@ -60,6 +64,12 @@ const app = {
     },
     setSize({ commit }, size) {
       commit('SET_SIZE', size)
+    },
+    setChangeNavMenu({ commit }, path) {
+      commit('CHANGE_NAVMENU', path)
+    },
+    setNavTopIndex({ commit }, navTopIndex) {
+      commit('SET_NAVTOPINDEX', navTopIndex)
     }
   }
 }

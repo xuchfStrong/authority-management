@@ -1,11 +1,11 @@
 import { loginByUsername, logout, getUserInfo } from '@/api/login'
-import { getToken, setToken, removeToken } from '@/utils/auth'
+import { getToken, setToken, removeToken, setLoginAcount, getLoginAcount, setIsAdmin, getIsAdmin } from '@/utils/auth'
 
 const user = {
   state: {
     user: '',
-    account: '',
-    isAdmin: true,
+    account: getLoginAcount(),
+    isAdmin: getIsAdmin(),
     status: '',
     code: '',
     token: getToken(),
@@ -68,6 +68,8 @@ const user = {
           commit('SET_ISADMIN', data.admin)
           commit('SET_asyncRouterMapDynamic', data.menus) // 根据后台返回的menus设置路由
           setToken(response.data['token'])
+          setIsAdmin(response.data.admin)
+          setLoginAcount(response.data.actAccount)
           resolve()
         }).catch(error => {
           reject(error)

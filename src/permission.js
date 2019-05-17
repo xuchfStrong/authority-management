@@ -3,7 +3,7 @@ import store from './store'
 import { Message } from 'element-ui'
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css'// progress bar style
-import { getToken } from '@/utils/auth' // getToken from cookie
+import { getToken, getIsAdmin } from '@/utils/auth' // getToken from cookie
 
 NProgress.configure({ showSpinner: false })// NProgress Configuration
 
@@ -31,9 +31,20 @@ router.beforeEach((to, from, next) => {
       NProgress.done() // if current page is dashboard will not trigger	afterEach hook, so manually handle it
     } else {
       if (!store.getters.isGenratedRoutes) { // 判断当前用户是否已经动态加载路由
-        const isAdmin = store.getters.isAdmin
+        const isAdmin = (getIsAdmin() === 'true')
         store.dispatch('GenerateRoutes', { isAdmin }).then(() => { // 根据roles权限生成可访问的路由表
           router.addRoutes(store.getters.addRouters) // 动态添加可访问路由表
+          const routernow = store.getters.permission_routers // 获取路由对象
+          const arr = to.path.split('/') // 获取to中的第一部分路由，比如获取/service/add 中的 /service
+          if (arr[2]) {
+            const path = '/'.concat(arr[1])
+            store.dispatch('setNavTopIndex', path) // 用于设置NavTopMenu的激活菜单
+            for (var i = 0; i < routernow.length; i++) { // 用于生成侧边栏
+              if (routernow[i].path === path) {
+                store.dispatch('setChangeNavMenu', routernow[i].children)
+              }
+            }
+          }
           next({ ...to, replace: true }) // hack方法 确保addRoutes已完成 ,set the replace: true so the navigation will not leave a history record
         }).catch((err) => {
           store.dispatch('FedLogOut').then(() => {

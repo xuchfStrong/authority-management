@@ -1,35 +1,34 @@
 <template>
   <div class="navbar-top">
-    <el-row>
-      <el-col :span="4" class="logo-container">
-        <span class="topbar-logos">统一权限认证</span>
-      </el-col>
-      <el-col :span="20">
-        <el-menu
-          :default-active="defaultActiveIndex"
-          :router="true"
-          :background-color="variables.navBarTopBg"
-          :text-color="variables.navBarTopText"
-          :active-text-color="variables.navBarTopTextActive"
-          class="el-menu-demo"
-          mode="horizontal"
-          @select="handleSelect">
-          <el-menu-item index="/">首页</el-menu-item>
-          <el-menu-item
-            v-for="item in permission_routers"
-            v-if="!item.hidden&&item.children"
-            :key="item.path"
-            :index="item.path" >
-            <template slot="title">
-              <!-- <navitem :icon="item.meta.icon||item.meta.icon" :title="generateTitle(item.meta.title)"/> -->
-              <navitem :icon="item.meta.icon||item.meta.icon" :title="item.meta.title"/>
-            </template>
-          </el-menu-item>
-        </el-menu>
-      </el-col>
-      <div class="right-menu">
-        <template>
-          <!-- <search class="right-menu-item" />
+    <div class="logo-container" @click="jumpToPage('/')">
+      <span class="topbar-logos">统一权限认证</span>
+    </div>
+    <div :span="20">
+      <el-menu
+        :default-active="defaultActiveIndex"
+        :router="true"
+        :background-color="variables.navBarTopBg"
+        :text-color="variables.navBarTopText"
+        :active-text-color="variables.navBarTopTextActive"
+        class="el-menu-demo"
+        mode="horizontal"
+        @select="handleSelect">
+        <el-menu-item index="/">首页</el-menu-item>
+        <el-menu-item
+          v-for="item in permission_routers"
+          v-if="!item.hidden&&item.children"
+          :key="item.path"
+          :index="item.path" >
+          <template slot="title">
+            <!-- <navitem :icon="item.meta.icon||item.meta.icon" :title="generateTitle(item.meta.title)"/> -->
+            <navitem :icon="item.meta.icon||item.meta.icon" :title="item.meta.title"/>
+          </template>
+        </el-menu-item>
+      </el-menu>
+    </div>
+    <div class="right-menu">
+      <template>
+        <!-- <search class="right-menu-item" />
           <error-log class="errLog-container right-menu-item hover-effect"/>
           <screenfull class="right-menu-item hover-effect"/>
           <el-tooltip :content="$t('navbar.size')" effect="dark" placement="bottom">
@@ -39,30 +38,29 @@
           <el-tooltip :content="$t('navbar.theme')" effect="dark" placement="bottom">
             <theme-picker class="right-menu-item hover-effect"/>
           </el-tooltip> -->
-          <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
-            <el-tooltip :content="name" effect="dark" placement="bottom">
-              <div class="avatar-wrapper">
-                <svg-icon icon-class="user" class-name="user-avatar"/>
-                <!-- <i class="el-icon-caret-bottom"/> -->
-              </div>
-            </el-tooltip>
-            <el-dropdown-menu slot="dropdown">
-              <!-- <el-dropdown-item>
-                <span style="display:block;" @click="logout">退出登录</span>
-              </el-dropdown-item> -->
-              <el-dropdown-item>
-                <modify-pwd/>
-              </el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
-          <el-tooltip content="退出" effect="dark" placement="bottom" class="right-menu-item hover-effect">
+        <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
+          <el-tooltip :content="account" effect="dark" placement="bottom">
             <div class="avatar-wrapper">
-              <svg-icon icon-class="logout" class-name="user-avatar" @click="logout"/>
+              <svg-icon icon-class="user" class-name="user-avatar"/>
+              <!-- <i class="el-icon-caret-bottom"/> -->
             </div>
           </el-tooltip>
-        </template>
-      </div>
-    </el-row>
+          <el-dropdown-menu slot="dropdown">
+            <!-- <el-dropdown-item>
+                <span style="display:block;" @click="logout">退出登录</span>
+              </el-dropdown-item> -->
+            <el-dropdown-item>
+              <modify-pwd/>
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+        <el-tooltip content="退出" effect="dark" placement="bottom" class="right-menu-item hover-effect">
+          <div class="avatar-wrapper">
+            <svg-icon icon-class="logout" class-name="user-avatar" @click="logout"/>
+          </div>
+        </el-tooltip>
+      </template>
+    </div>
   </div>
 </template>
 
@@ -77,6 +75,7 @@ import LangSelect from '@/components/LangSelect'
 import ThemePicker from '@/components/ThemePicker'
 import Search from '@/components/HeaderSearch'
 import variables from '@/styles/variables.scss'
+import { getIsAdmin, getLoginAcount } from '@/utils/auth'
 
 export default {
   components: {
@@ -91,7 +90,7 @@ export default {
   },
   data() {
     return {
-      defaultActiveIndex: '/',
+      defaultActiveIndex: this.navIndex() ? this.navIndex() : '/',
       loading: false,
       nickname: ''
     }
@@ -102,10 +101,26 @@ export default {
       'sidebar',
       'name',
       'avatar',
-      'device'
+      'device',
+      'navTopIndex'
     ]),
     variables() {
       return variables
+    },
+    isAdmin() {
+      return (getIsAdmin() === 'true')
+    },
+    account() {
+      return getLoginAcount()
+    },
+    path() {
+      return this.$route.path
+    }
+  },
+  watch: {
+    path: function(newQuestion, oldQuestion) {
+      this.defaultActiveIndex = this.navTopIndex
+      console.log('23', this.defaultActiveIndex)
     }
   },
   methods: {
@@ -116,12 +131,21 @@ export default {
     },
     handleSelect(index) {
       this.defaultActiveIndex = index
+      this.$store.commit('SET_NAVTOPINDEX', index)
       const routers = this.permission_routers // 获取路由对象
       for (var i = 0; i < routers.length; i++) {
         if (routers[i].path === index) {
           this.$store.commit('CHANGE_NAVMENU', routers[i].children)
         }
       }
+    },
+    jumpToPage(routePath) {
+      this.$store.commit('SET_NAVTOPINDEX', routePath)
+      this.$router.push({ path: routePath })
+    },
+    navIndex() {
+      console.log('22', this.$store.getters.navTopIndex)
+      return this.$store.getters.navTopIndex
     }
   }
 }
@@ -130,6 +154,8 @@ export default {
 <style rel="stylesheet/scss" lang="scss" scoped>
 @import "src/styles/variables.scss";
 .navbar-top {
+  display: flex;
+  flex-flow: row nowrap;
   height: 50px;
   line-height: 50px;
   width: 100%;
@@ -143,7 +169,9 @@ export default {
     left: 0;
     top: 0;
     .logo-container {
+      width: 250px;
       height: 50px;
+      cursor: pointer;
       .topbar-logos {
         color: $navBarTopLogo;
         line-height: 50px;
