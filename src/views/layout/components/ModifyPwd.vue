@@ -89,13 +89,18 @@ export default {
     }
   },
   methods: {
+    logout() {
+      this.$store.dispatch('LogOut').then(() => {
+        location.reload() // 为了重新实例化vue-router对象 避免bug
+      })
+    },
     handleSubmit() {
       this.$refs.form.validate((valid) => {
         if (valid) {
           const para = {
-            password: md5(this.modifyPwdForm.actPassword),
+            actPassword: md5(this.modifyPwdForm.actPassword),
             newPassword: md5(this.modifyPwdForm.newPassword),
-            reNewPassword: md5(this.modifyPwdForm.confirmPassword)
+            confirmPassword: md5(this.modifyPwdForm.confirmPassword)
           }
           modifyPwd(para).then((res) => {
             this.$message({

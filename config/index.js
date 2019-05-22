@@ -11,6 +11,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/api': {
+        // target: 'https://www.easy-mock.com/mock/5cc110b22bf47f40874ffc49/role',
         target: 'http://192.168.0.135:8762/service-auth-manager/',  //目标接口域名
         changeOrigin: true,  //是否跨域
         pathRewrite: {

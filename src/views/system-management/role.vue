@@ -207,7 +207,8 @@ export default {
     async handleGetMenuList() {
       const res = await getMenuList()
       this.serviceMenus = res.data
-      const fullMenus = this.generateFullMenus(res.data)
+      const changedMenus = this.replaceMenuPid(res.data)
+      const fullMenus = this.generateFullMenus(changedMenus)
       this.menus = this.setMenuTreeData(fullMenus, 9999)
     },
 
@@ -245,7 +246,18 @@ export default {
       return data
     },
 
-    // 将资源列表中的每一个seeId添加一条{'meuPid': 9999, 'meuId': 本服务的meuSeeid, meuText: 本服务的seeText}
+    // 将菜单列表中meuPid=null的数据修改为meuPid=meuSeeid
+    replaceMenuPid(menus) {
+      const menusCopy = [...menus]
+      menusCopy.forEach(menu => {
+        if (!menu.meuPid) {
+          menu.meuPid = menu.meuSeeid
+        }
+      })
+
+      return menusCopy
+    },
+    // 将菜单列表中的每一个seeId添加一条{'meuPid': 9999, 'meuId': 本服务的meuSeeid, meuText: 本服务的seeText}
     generateFullMenus(menus) {
       const menusCopy = [...menus]
       const rootId = 9999

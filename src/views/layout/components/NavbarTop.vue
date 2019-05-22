@@ -120,7 +120,6 @@ export default {
   watch: {
     path: function(newQuestion, oldQuestion) {
       this.defaultActiveIndex = this.navTopIndex
-      console.log('23', this.defaultActiveIndex)
     }
   },
   methods: {
@@ -144,7 +143,6 @@ export default {
       this.$router.push({ path: routePath })
     },
     navIndex() {
-      console.log('22', this.$store.getters.navTopIndex)
       return this.$store.getters.navTopIndex
     }
   }

@@ -117,13 +117,13 @@ export default new Router({
 })
 
 export const asyncRouterMap = [
-  /**
+
   {
     path: '/permission',
     component: Layout,
     id: 1,
     parentId: 0,
-    redirect: '/permission/directive',
+    redirect: '/permission/page',
     alwaysShow: true, // will always show the root menu
     hidden: false,
     name: 'Permission',
@@ -168,7 +168,6 @@ export const asyncRouterMap = [
       }
     ]
   },
-  */
 
   {
     path: '/icon',

@@ -111,6 +111,7 @@ const permission = {
           // accessedRouters = filterAsyncRouter(asyncRouterMap, roles)
           // accessedRouters = filterAsyncRouterDynamic(rootGetters.asyncRouterMapDynamic)
           accessedRouters = filterAsyncRouter(asyncRouterMap, rootGetters.asyncRouterMapDynamic)
+          console.log('accessedRouters', accessedRouters)
         }
         commit('SET_ROUTERS', accessedRouters)
         commit('SET_IsGenratedRoutes', true)

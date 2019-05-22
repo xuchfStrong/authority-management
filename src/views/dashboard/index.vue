@@ -8,6 +8,7 @@
 import { mapGetters } from 'vuex'
 import adminDashboard from './admin'
 import editorDashboard from './editor'
+import { getIsAdmin } from '@/utils/auth'
 
 export default {
   name: 'Dashboard',
@@ -19,9 +20,11 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'roles',
-      'isAdmin'
-    ])
+      'roles'
+    ]),
+    isAdmin() {
+      return (getIsAdmin() === 'true')
+    }
   },
   created() {
     if (!this.isAdmin) {
