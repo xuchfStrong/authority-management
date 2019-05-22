@@ -1,5 +1,5 @@
 import { loginByUsername, logout, getUserInfo } from '@/api/login'
-import { getToken, setToken, removeToken, setLoginAcount, getLoginAcount, setIsAdmin, getIsAdmin } from '@/utils/auth'
+import { getToken, setToken, removeToken, setLoginAcount, getLoginAcount, setIsAdmin, getIsAdmin, getMenus, setMenus, removeMenus } from '@/utils/auth'
 
 const user = {
   state: {
@@ -16,7 +16,7 @@ const user = {
     setting: {
       articlePlatform: []
     },
-    asyncRouterMapDynamic: {}
+    asyncRouterMapDynamic: getMenus()
   },
 
   mutations: {
@@ -70,6 +70,7 @@ const user = {
           setToken(response.data['token'])
           setIsAdmin(response.data.admin)
           setLoginAcount(response.data.actAccount)
+          setMenus(data.menus)
           resolve()
         }).catch(error => {
           reject(error)
@@ -125,6 +126,7 @@ const user = {
           commit('SET_TOKEN', '')
           commit('SET_ROLES', [])
           removeToken()
+          removeMenus()
           resolve()
         }).catch(error => {
           reject(error)

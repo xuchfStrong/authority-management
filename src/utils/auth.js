@@ -1,8 +1,10 @@
 import Cookies from 'js-cookie'
+import LStorage from './LStorage'
 
 const TokenKey = 'access-token'
 const IsAdminKey = 'isAdmin'
 const LoginAcount = 'LoginAcount'
+const Menus = 'menus'
 
 export function getToken() {
   return Cookies.get(TokenKey)
@@ -39,3 +41,16 @@ export function setLoginAcount(loginAcount) {
 export function removeLoginAcount() {
   return Cookies.remove(LoginAcount)
 }
+
+export function getMenus() {
+  return LStorage.getItem(Menus)
+}
+
+export function setMenus(menus) {
+  return LStorage.setItem(Menus, menus)
+}
+
+export function removeMenus() {
+  return LStorage.removeItem(Menus)
+}
+

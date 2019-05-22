@@ -126,7 +126,7 @@
       <el-pagination
         :total="total"
         :page-sizes="[10, 20, 30, 50]"
-        :page-size="pagesize"
+        :page-size="pageSize"
         style="float:right;"
         layout="total, sizes, prev, pager, next, jumper"
         @current-change="handleCurrentChange"
@@ -187,8 +187,8 @@ export default {
       dialogType: 'new',
       loading: false,
       total: 0,
-      page: 1,
-      pagesize: 10,
+      pageNum: 1,
+      pageSize: 10,
       sels: [], // 列表选中列
       accountList: [],
       actAccount: '',
@@ -206,7 +206,7 @@ export default {
   },
   computed: {
     showFlag() {
-      return this.total > 10
+      return this.total > 0
     }
   },
   created() {
@@ -217,8 +217,8 @@ export default {
     handleGetAccount() {
       this.loading = true
       const para = {
-        page: this.page,
-        pagesize: this.pagesize
+        pageNum: this.pageNum,
+        pageSize: this.pageSize
       }
       getAccountGrid(para).then(res => {
         this.accountList = res.data.list
@@ -260,8 +260,8 @@ export default {
         actAccount: this.actAccount,
         actName: this.actName,
         actPhone: this.actPhone,
-        page: 1,
-        pagesize: this.pagesize
+        pageNum: 1,
+        pageSize: this.pageSize
       }
       getAccountGrid(para).then(res => {
         this.accountList = res.data.list
@@ -278,8 +278,8 @@ export default {
         actAccount: this.actAccount,
         actName: this.actName,
         actPhone: this.actPhone,
-        page: this.page,
-        pagesize: this.pagesize
+        pageNum: this.pageNum,
+        pageSize: this.pageSize
       }
       getAccountGrid(para).then(res => {
         this.accountList = res.data.list
@@ -312,6 +312,7 @@ export default {
           }
           await deleteAccount(para)
           this.accountList.splice($index, 1)
+          this.total -= 1
         })
         .catch(err => { console.error(err) })
     },
@@ -355,11 +356,11 @@ export default {
 
     async confirmAccount() {
       const isEdit = this.dialogType === 'edit'
+      if (this.account.actPhone === '') { this.account.actPhone = null }
+      if (this.account.actEmail === '') { this.account.actEmail = null }
 
       if (isEdit) {
         try {
-          if (this.account.actPhone === '') { this.account.actPhone = null }
-          if (this.account.actEmail === '') { this.account.actEmail = null }
           await editAccount(this.account)
           // this.handleGetAccount()
           for (let index = 0; index < this.accountList.length; index++) {
@@ -388,7 +389,7 @@ export default {
 
     // 改变页面
     handleCurrentChange(val) {
-      this.page = val
+      this.pageNum = val
       this.handleChangePage()
     },
 
@@ -398,7 +399,7 @@ export default {
     },
 
     changePageSize(size) {
-      this.pagesize = size
+      this.pageSize = size
       this.handleChangePage()
     },
 

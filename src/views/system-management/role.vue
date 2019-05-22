@@ -122,7 +122,7 @@
       <el-pagination
         :total="total"
         :page-sizes="[10, 20, 30, 50]"
-        :page-size="pagesize"
+        :page-size="pageSize"
         style="float:right;"
         layout="total, sizes, prev, pager, next, jumper"
         @current-change="handleCurrentChange"
@@ -136,7 +136,7 @@ import { getMenuList, getResourceList, changeRoleStatus, getRoleGrid, deleteRole
 import { deepClone } from '@/utils'
 
 const defaultRole = {
-  roeInfo: '',
+  roeInfo: null,
   roeName: '',
   roeId: Number,
   roeActive: 1,
@@ -178,8 +178,8 @@ export default {
       },
       loading: false,
       total: 0,
-      page: 1,
-      pagesize: 10,
+      pageNum: 1,
+      pageSize: 10,
       sels: [], // 列表选中列
       roleName: '',
       roleActive: true,
@@ -195,7 +195,7 @@ export default {
       return this.resources
     },
     showFlag() {
-      return this.total > 10
+      return this.total > 0
     }
   },
   created() {
@@ -222,8 +222,8 @@ export default {
     async handleGetRoles() {
       this.loading = true
       const para = {
-        page: this.page,
-        pagesize: this.pagesize
+        pageNum: this.pageNum,
+        pageSize: this.pageSize
       }
       const res = await getRoleGrid(para)
       this.rolesList = res.data.list
@@ -404,6 +404,7 @@ export default {
           }
           await deleteRole(para)
           this.rolesList.splice($index, 1)
+          this.total -= 1
         })
         .catch(err => { console.error(err) })
     },
@@ -420,14 +421,15 @@ export default {
       const isEdit = this.dialogType === 'edit'
       const checkedMenuKeys = this.$refs.menuTree.getCheckedKeys()
       const checkedResourceKeys = this.$refs.resourceTree.getCheckedKeys()
-      const menuTree = this.generateMenuTree(deepClone(this.menus), checkedMenuKeys)
-      const resourceTree = this.generateResourceTree(deepClone(this.resources), checkedResourceKeys)
-      const menuList = this.generateArr(menuTree)
-      const resourceList = this.generateArr(resourceTree)
-      const menuIds = this.generateFullMenuId(menuList)
-      const resourceIds = this.generateFullResourceId(resourceList)
-      this.role.menuIds = menuIds
-      this.role.resourceIds = resourceIds
+      // const menuTree = this.generateMenuTree(deepClone(this.menus), checkedMenuKeys)
+      // const resourceTree = this.generateResourceTree(deepClone(this.resources), checkedResourceKeys)
+      // const menuList = this.generateArr(menuTree)
+      // const resourceList = this.generateArr(resourceTree)
+      // const menuIds = this.generateFullMenuId(menuList)
+      // const resourceIds = this.generateFullResourceId(resourceList)
+      this.role.menuIds = checkedMenuKeys
+      this.role.resourceIds = checkedResourceKeys
+      if (this.role.roeInfo === '') { this.role.roeInfo = null }
 
       if (isEdit) {
         try {
@@ -458,13 +460,13 @@ export default {
     },
 
     changePageSize(size) {
-      this.pagesize = size
+      this.pageSize = size
       this.handleChangePage()
     },
 
     // 改变页面
     handleCurrentChange(val) {
-      this.page = val
+      this.pageNum = val
       this.handleChangePage()
     },
 
@@ -498,8 +500,8 @@ export default {
       this.loading = true
       const para = {
         roeName: this.roleName,
-        page: 1,
-        pagesize: this.pagesize
+        pageNum: 1,
+        pageSize: this.pageSize
       }
       getRoleGrid(para).then(res => {
         this.rolesList = res.data.list
@@ -514,8 +516,8 @@ export default {
       this.loading = true
       const para = {
         roeName: this.roleName,
-        page: this.page,
-        pagesize: this.pagesize
+        pageNum: this.pageNum,
+        pageSize: this.pageSize
       }
       getRoleGrid(para).then(res => {
         this.rolesList = res.data.list

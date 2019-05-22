@@ -41,7 +41,7 @@
       <el-pagination
         :total="total"
         :page-sizes="[10, 20, 30, 50]"
-        :page-size="pagesize"
+        :page-size="pageSize"
         style="float:right;"
         layout="total, sizes, prev, pager, next, jumper"
         @current-change="handleCurrentChange"
@@ -66,8 +66,8 @@ export default {
     return {
       loading: false,
       total: 0,
-      page: 1,
-      pagesize: 10,
+      pageNum: 1,
+      pageSize: 10,
       sels: [], // 列表选中列
       service: [],
       serviceText: '',
@@ -86,7 +86,7 @@ export default {
   methods: {
     // 改变页面
     handleCurrentChange(val) {
-      this.page = val
+      this.pageNum = val
       this.handleGetService()
     },
 
@@ -104,7 +104,7 @@ export default {
     },
 
     changePageSize: function(size) {
-      this.pagesize = size
+      this.pageSize = size
       this.handleGetService()
     },
 
@@ -124,8 +124,8 @@ export default {
     handleGetService: function() {
       this.loading = true
       const para = {
-        page: this.page,
-        pagesize: this.pagesize
+        pageNum: this.pageNum,
+        pageSize: this.pageSize
       }
       getServiceGrid(para).then(res => {
         this.service = res.data.list
@@ -140,8 +140,8 @@ export default {
       this.loading = true
       const para = {
         seeText: this.serviceText,
-        page: this.page,
-        pagesize: this.pagesize
+        pageNum: this.pageNum,
+        pageSize: this.pageSize
       }
       getServiceGrid(para).then(res => {
         this.service = res.data.list
