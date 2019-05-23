@@ -15,8 +15,7 @@
         @select="handleSelect">
         <el-menu-item index="/">首页</el-menu-item>
         <el-menu-item
-          v-for="item in permission_routers"
-          v-if="!item.hidden&&item.children"
+          v-for="item in shouldShowRoutes"
           :key="item.path"
           :index="item.path" >
           <template slot="title">
@@ -115,6 +114,15 @@ export default {
     },
     path() {
       return this.$route.path
+    },
+    shouldShowRoutes() {
+      const arr = []
+      this.permission_routers.forEach((item, index) => {
+        if (!item.hidden && item.children) {
+          arr.push(item)
+        }
+      })
+      return arr
     }
   },
   watch: {
