@@ -32,82 +32,81 @@ import nestedRouter from './modules/nested'
     affix: true                  if true, the tag will affix in the tags-view
   }
 **/
-export const constantRouterMap = [
-  {
-    path: '/redirect',
-    component: Layout,
-    hidden: true,
-    children: [
-      {
-        path: '/redirect/:path*',
-        component: () => import('@/views/redirect/index')
-      }
-    ]
-  },
-  {
-    path: '/login',
-    component: () => import('@/views/login/index'),
-    hidden: true
-  },
-  {
-    path: '/auth-redirect',
-    component: () => import('@/views/login/authredirect'),
-    hidden: true
-  },
-  {
-    path: '/404',
-    component: () => import('@/views/errorPage/404'),
-    hidden: true
-  },
-  {
-    path: '/401',
-    component: () => import('@/views/errorPage/401'),
-    hidden: true
-  },
-  {
-    path: '',
-    component: Layout,
-    redirect: 'dashboard',
-    hidden: true,
-    children: [
-      {
-        path: 'dashboard',
-        component: () => import('@/views/dashboard/index'),
-        name: 'Dashboard',
-        meta: { title: 'dashboard', icon: 'dashboard', noCache: true, affix: true }
-      }
-    ]
-  },
-  {
-    path: '/documentation',
-    component: Layout,
-    redirect: '/documentation/index',
-    meta: { title: 'documentation' },
-    hidden: true,
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/documentation/index'),
-        name: 'Documentation',
-        meta: { title: 'documentation', icon: 'documentation', affix: true }
-      }
-    ]
-  },
-  {
-    path: '/guide',
-    component: Layout,
-    redirect: '/guide/index',
-    meta: { title: 'guide' },
-    hidden: true,
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/guide/index'),
-        name: 'Guide',
-        meta: { title: 'guide', icon: 'guide', noCache: true }
-      }
-    ]
-  }
+export const constantRouterMap = [{
+  path: '/redirect',
+  component: Layout,
+  hidden: true,
+  children: [{
+    path: '/redirect/:path*',
+    component: () =>
+                import('@/views/redirect/index')
+  }]
+},
+{
+  path: '/login',
+  component: () =>
+            import('@/views/login/index'),
+  hidden: true
+},
+{
+  path: '/auth-redirect',
+  component: () =>
+            import('@/views/login/authredirect'),
+  hidden: true
+},
+{
+  path: '/404',
+  component: () =>
+            import('@/views/errorPage/404'),
+  hidden: true
+},
+{
+  path: '/401',
+  component: () =>
+            import('@/views/errorPage/401'),
+  hidden: true
+},
+{
+  path: '',
+  component: Layout,
+  redirect: 'dashboard',
+  hidden: true,
+  children: [{
+    path: 'dashboard',
+    component: () =>
+                import('@/views/dashboard/index'),
+    name: 'Dashboard',
+    meta: { title: 'dashboard', icon: 'dashboard', noCache: true, affix: true }
+  }]
+},
+{
+  path: '/documentation',
+  component: Layout,
+  redirect: '/documentation/index',
+  meta: { title: 'documentation' },
+  hidden: true,
+  children: [{
+    path: 'index',
+    component: () =>
+                import('@/views/documentation/index'),
+    name: 'Documentation',
+    meta: { title: 'documentation', icon: 'documentation', affix: true }
+  }]
+},
+{
+  path: '/guide',
+  component: Layout,
+  redirect: '/guide/index',
+  meta: { title: 'guide' },
+  hidden: true,
+  children: [{
+    path: 'index',
+    component: () =>
+                import('@/views/guide/index'),
+    name: 'Guide',
+    meta: { title: 'guide', icon: 'guide', noCache: true }
+  }]
+}
 ]
 
 export default new Router({
@@ -132,40 +131,42 @@ export const asyncRouterMap = [
       icon: 'lock',
       roles: ['admin', 'editor'] // you can set roles in root nav
     },
-    children: [
-      {
-        path: '/permission/page',
-        component: () => import('@/views/permission/page'),
-        id: 11,
-        parentId: 1,
-        name: 'PagePermission',
-        meta: {
-          title: 'pagePermission',
-          roles: ['admin'] // or you can only set roles in sub nav
-        }
-      },
-      {
-        path: '/permission/directive',
-        component: () => import('@/views/permission/directive'),
-        id: 12,
-        parentId: 1,
-        name: 'DirectivePermission',
-        meta: {
-          title: 'directivePermission'
-          // if do not set roles, means: this page does not require permission
-        }
-      },
-      {
-        path: '/permission/role',
-        component: () => import('@/views/permission/role'),
-        id: 13,
-        parentId: 1,
-        name: 'RolePermission',
-        meta: {
-          title: 'rolePermission',
-          roles: ['admin']
-        }
+    children: [{
+      path: '/permission/page',
+      component: () =>
+                    import('@/views/permission/page'),
+      id: 11,
+      parentId: 1,
+      name: 'PagePermission',
+      meta: {
+        title: 'pagePermission',
+        roles: ['admin'] // or you can only set roles in sub nav
       }
+    },
+    {
+      path: '/permission/directive',
+      component: () =>
+                    import('@/views/permission/directive'),
+      id: 12,
+      parentId: 1,
+      name: 'DirectivePermission',
+      meta: {
+        title: 'directivePermission'
+        // if do not set roles, means: this page does not require permission
+      }
+    },
+    {
+      path: '/permission/role',
+      component: () =>
+                    import('@/views/permission/role'),
+      id: 13,
+      parentId: 1,
+      name: 'RolePermission',
+      meta: {
+        title: 'rolePermission',
+        roles: ['admin']
+      }
+    }
     ]
   },
 
@@ -176,16 +177,15 @@ export const asyncRouterMap = [
     parentId: 0,
     redirect: '/icon/index',
     meta: { title: 'icon' },
-    children: [
-      {
-        path: '/icon/index',
-        component: () => import('@/views/svg-icons/index'),
-        id: 21,
-        parentId: 2,
-        name: 'Icons',
-        meta: { title: 'icons', icon: 'icon', noCache: true }
-      }
-    ]
+    children: [{
+      path: '/icon/index',
+      component: () =>
+                import('@/views/svg-icons/index'),
+      id: 21,
+      parentId: 2,
+      name: 'Icons',
+      meta: { title: 'icons', icon: 'icon', noCache: true }
+    }]
   },
 
   {
@@ -199,32 +199,63 @@ export const asyncRouterMap = [
       title: '系统管理',
       icon: 'example'
     },
-    children: [
-      {
-        path: '/system/service',
-        component: () => import('@/views/system-management/service'),
-        id: 61,
-        parentId: 6,
-        name: 'SystemService',
-        meta: { title: '服务管理', icon: 'edit' }
-      },
-      {
-        path: '/system/role',
-        component: () => import('@/views/system-management/role'),
-        id: 62,
-        parentId: 6,
-        name: 'SystemRole',
-        meta: { title: '角色管理', icon: 'list' },
-        hidden: false
-      },
-      {
-        path: '/system/account',
-        component: () => import('@/views/system-management/account'),
-        id: 63,
-        parentId: 6,
-        name: 'SystemUser',
-        meta: { title: '用户管理', icon: 'list' }
-      }
+    children: [{
+      path: '/system/service',
+      component: () =>
+                    import('@/views/system-management/service'),
+      id: 61,
+      parentId: 6,
+      name: 'SystemService',
+      meta: { title: '服务管理', icon: 'edit' }
+    },
+    {
+      path: '/system/role',
+      component: () =>
+                    import('@/views/system-management/role'),
+      id: 62,
+      parentId: 6,
+      name: 'SystemRole',
+      meta: { title: '角色管理', icon: 'list' },
+      hidden: false
+    },
+    {
+      path: '/system/account',
+      component: () =>
+                    import('@/views/system-management/account'),
+      id: 63,
+      parentId: 6,
+      name: 'SystemUser',
+      meta: { title: '用户管理', icon: 'list' }
+    }
+    ]
+  },
+
+  {
+    path: '/tab',
+    component: Layout,
+    name: 'Tab1',
+    meta: { title: 'tab1', icon: 'tab' },
+    children: [{
+      path: '/tab/index',
+      component: () =>
+                    import('@/views/tab/index'),
+      name: 'Tab',
+      meta: { title: 'tab', icon: 'tab' }
+    },
+    {
+      path: '/tab/tabtest',
+      component: () =>
+                    import('@/views/tab/tabtest'),
+      name: 'Tabtest',
+      meta: { title: 'tabtest', icon: 'tab' }
+    },
+    {
+      path: '/tab/tabtest1',
+      component: () =>
+                    import('@/views/tab/tabtest1'),
+      name: 'Tabtest1',
+      meta: { title: 'tabtest1', icon: 'tab' }
+    }
     ]
   },
 

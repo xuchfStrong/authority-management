@@ -17,5 +17,8 @@ selenium-debug.log
 *.ntvs*
 *.njsproj
 *.sln
+*.rar
+*.zip
+*.7z
 
 package-lock.json
