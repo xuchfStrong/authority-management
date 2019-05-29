@@ -30,3 +30,10 @@ export function getUserInfo(token) {
   })
 }
 
+export function getJsonData() {
+  return request({
+    url: '/tree',
+    method: 'get'
+  })
+}
+

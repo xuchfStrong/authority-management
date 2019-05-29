@@ -210,8 +210,7 @@ export const asyncRouterMap = [
     },
     {
       path: '/system/role',
-      component: () =>
-                    import('@/views/system-management/role'),
+      component: () => import('@/views/system-management/role'),
       id: 62,
       parentId: 6,
       name: 'SystemRole',
@@ -220,8 +219,7 @@ export const asyncRouterMap = [
     },
     {
       path: '/system/account',
-      component: () =>
-                    import('@/views/system-management/account'),
+      component: () => import('@/views/system-management/account'),
       id: 63,
       parentId: 6,
       name: 'SystemUser',
@@ -255,6 +253,27 @@ export const asyncRouterMap = [
                     import('@/views/tab/tabtest1'),
       name: 'Tabtest1',
       meta: { title: 'tabtest1', icon: 'tab' }
+    },
+    {
+      path: '/tab/showMore',
+      component: () =>
+                    import('@/views/tab/showMoreTest'),
+      name: 'ShowMore',
+      meta: { title: 'showMore', icon: 'tab' }
+    },
+    {
+      path: '/tab/hideTable',
+      component: () =>
+                    import('@/views/tab/hideTable'),
+      name: 'HideTable',
+      meta: { title: 'hideTable', icon: 'tab' }
+    },
+    {
+      path: '/tab/tree',
+      component: () =>
+                    import('@/views/tab/tree'),
+      name: 'JsonTree',
+      meta: { title: 'Tree', icon: 'tab' }
     }
     ]
   },
