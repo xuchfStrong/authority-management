@@ -241,6 +241,12 @@ export const asyncRouterMap = [
       meta: { title: 'tab', icon: 'tab' }
     },
     {
+      path: '/tab/interface',
+      component: () => import('@/views/tab/interface/index'),
+      name: 'interface',
+      meta: { title: 'Interface', icon: 'tab' }
+    },
+    {
       path: '/tab/tabtest',
       component: () =>
                     import('@/views/tab/tabtest'),

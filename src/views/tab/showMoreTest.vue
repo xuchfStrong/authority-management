@@ -8,7 +8,7 @@
 <script>
 import showMore from './components/showMore'
 export default {
-  name: 'ShowMore',
+  name: 'ShowMoreTest',
   components: { showMore },
   data() {
     return {
