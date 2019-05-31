@@ -5,12 +5,22 @@
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <el-tab-pane label="接口管理" name="first" class="tree-container">
           <el-scrollbar class="default-scrollbar" wrap-class="default-scrollbar__wrap" view-class="p20-scrollbar__view">
-            <el-tree :data="data" :props="defaultProps" @node-click="handleNodeClick"/>
+            <el-tree
+              :data="data"
+              :props="defaultProps"
+              :default-expanded-keys="[1]"
+              node-key="id"
+              @node-click="handleNodeClick"/>
           </el-scrollbar>
         </el-tab-pane>
         <el-tab-pane label="配置管理" name="second" class="tree-container">
           <el-scrollbar class="default-scrollbar" wrap-class="default-scrollbar__wrap" view-class="p20-scrollbar__view">
-            <el-tree :data="data" :props="defaultProps" @node-click="handleNodeClick"/>
+            <el-tree
+              :data="data"
+              :props="defaultProps"
+              :default-expanded-keys="[2, 3]"
+              node-key="id"
+              @node-click="handleNodeClick"/>
           </el-scrollbar>
         </el-tab-pane>
       </el-tabs>
@@ -36,38 +46,38 @@ export default {
       activeName: 'first',
       noData: true,
       data: [{
+        id: 1,
         label: '一级 1',
         children: [{
+          id: 4,
           label: '二级 1-1',
           children: [{
+            id: 9,
             label: '三级 1-1-1'
+          }, {
+            id: 10,
+            label: '三级 1-1-2'
           }]
         }]
       }, {
+        id: 2,
         label: '一级 2',
         children: [{
-          label: '二级 2-1',
-          children: [{
-            label: '三级 2-1-1'
-          }]
+          id: 5,
+          label: '二级 2-1'
         }, {
-          label: '二级 2-2',
-          children: [{
-            label: '三级 2-2-1'
-          }]
+          id: 6,
+          label: '二级 2-2'
         }]
       }, {
+        id: 3,
         label: '一级 3',
         children: [{
-          label: '二级 3-1',
-          children: [{
-            label: '三级 3-1-1'
-          }]
+          id: 7,
+          label: '二级 3-1'
         }, {
-          label: '二级 3-2',
-          children: [{
-            label: '三级 3-2-1'
-          }]
+          id: 8,
+          label: '二级 3-2'
         }]
       }],
       defaultProps: {

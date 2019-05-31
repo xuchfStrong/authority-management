@@ -37,7 +37,7 @@
           <el-tooltip :content="$t('navbar.theme')" effect="dark" placement="bottom">
             <theme-picker class="right-menu-item hover-effect"/>
           </el-tooltip> -->
-        <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
+        <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click" placement="bottom">
           <el-tooltip :content="account" effect="dark" placement="bottom">
             <div class="avatar-wrapper">
               <svg-icon icon-class="user" class-name="user-avatar"/>

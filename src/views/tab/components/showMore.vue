@@ -78,10 +78,10 @@ export default {
         position: absolute;
         right: 10px;
         bottom: 0;
-        // width: 100%;
+        width: 100%;
         padding-top: 40px;
         text-align: center;
-        // background-image: linear-gradient(-180deg, rgba(255, 255, 255, 0) 0%, #fff 70%);
+        background-image: linear-gradient(-180deg, rgba(255, 255, 255, 0) 0%, #fff 70%);
 
         &.show-more {
             padding-top: 0;

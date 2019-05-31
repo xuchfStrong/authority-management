@@ -3,22 +3,29 @@
   <div class="app-container">
     <el-table :data="dataList" border fit>
       <el-table-column prop="id" label="ID" sortable align="center"/>
-      <el-table-column label="内容" align="center" show-overflow-tooltip>
+      <el-table-column label="内容" align="center">
         <template slot-scope="scope">
-          <el-tree
-            :data="scope.row.content"
-            :props="defaultProps"
-            default-expand-all
-            @node-click="handleNodeClick"/>
+          <el-popover
+            :placement="placement"
+            width="400"
+            trigger="click">
+            <div class="fullcontent-container">
+              <el-tree
+                :data="scope.row.fullcontent"
+                :props="defaultProps"
+                default-expand-all
+                @node-click="handleNodeClick"/>
+            </div>
+            <span slot="reference" @click="getEvent($event)">{{ scope.row.content }}</span>
+          </el-popover>
         </template>
       </el-table-column>
     </el-table>
-
-    <el-tree
+    <!-- <el-tree
       :data="tData"
       :props="defaultProps"
       default-expand-all
-      @node-click="handleNodeClick"/>
+      @node-click="handleNodeClick"/> -->
   </div>
 </template>
 
@@ -29,47 +36,14 @@ export default {
   components: {},
   data() {
     return {
-      data: [{
-        label: '一级 1',
-        children: [{
-          label: '二级 1-1',
-          children: [{
-            label: '三级 1-1-1'
-          }]
-        }]
-      }, {
-        label: '一级 2',
-        children: [{
-          label: '二级 2-1',
-          children: [{
-            label: '三级 2-1-1'
-          }]
-        }, {
-          label: '二级 2-2',
-          children: [{
-            label: '三级 2-2-1'
-          }]
-        }]
-      }, {
-        label: '一级 3',
-        children: [{
-          label: '二级 3-1',
-          children: [{
-            label: '三级 3-1-1'
-          }]
-        }, {
-          label: '二级 3-2',
-          children: [{
-            label: '三级 3-2-1'
-          }]
-        }]
-      }],
       defaultProps: {
         children: 'children',
         label: 'label'
       },
       tData: [],
-      dataList: []
+      strData: '',
+      dataList: [],
+      placement: 'left'
     }
   },
 
@@ -89,8 +63,12 @@ export default {
     async handleGetData() {
       const res = await getJsonData()
       this.tData = this.jsonToTree2(res.data)
-      this.dataList.push({ id: 1, content: this.tData })
-      // this.dataList.push({ id: 2, content: this.tData })
+      this.strData = JSON.stringify(res.data).slice(0, 30).replace(/[\"\{\}]/g, '').concat('...')
+      let i = 0
+      while (i < 20) {
+        this.dataList.push({ id: i, content: this.strData, fullcontent: this.tData })
+        i++
+      }
     },
 
     /**
@@ -130,6 +108,28 @@ export default {
         }
       })
       return jsonData
+    },
+
+    getEvent(event) {
+      const el = event.currentTarget // event.currentTarget 是当触发当前事件的元素
+      const elOffsetTop = el.parentElement.parentElement.parentElement.offsetTop
+      const docClientHeight = document.documentElement.clientHeight
+      if ((elOffsetTop + 154) < 250) {
+        this.placement = 'left-start'
+      } else if ((docClientHeight - elOffsetTop - 154) < 200) {
+        this.placement = 'left-end'
+      } else {
+        this.placement = 'left'
+      }
+      // console.log('top', (elOffsetTop + 154))
+      // console.log('height', (docClientHeight - elOffsetTop - 154))
+      // console.log('placement', this.placement)
+      // console.log('el', el.offsetTop)
+      // console.log('el.p', el.parentElement.offsetTop)
+      // console.log('el.p.p', el.parentElement.parentElement.offsetTop)
+      // console.log('el.p.p.p', el.parentElement.parentElement.parentElement.offsetTop)
+      // console.log('clientWidth', document.documentElement.clientWidth) // document.documentElement是整个文档
+      // console.log('clientHeight', document.documentElement.clientHeight)
     }
   }
 }
@@ -137,4 +137,8 @@ export default {
 </script>
 
 <style lang='scss' scoped>
+.fullcontent-container {
+  overflow: auto;
+  max-height: 400px;
+}
 </style>
