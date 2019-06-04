@@ -21,11 +21,6 @@
         </template>
       </el-table-column>
     </el-table>
-    <!-- <el-tree
-      :data="tData"
-      :props="defaultProps"
-      default-expand-all
-      @node-click="handleNodeClick"/> -->
   </div>
 </template>
 
@@ -87,7 +82,7 @@ export default {
           const children = []
           data[key].forEach((item, index) => {
             if (typeof (item) === 'object') {
-              children.push({ 'label': index, 'children': this.jsonToTree2(item) })
+              children.push({ 'label': '--', 'children': this.jsonToTree2(item) })
             } else {
               children.push({ 'label': item })
             }
